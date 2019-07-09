@@ -3,11 +3,8 @@ var app = express();
 var http = require('http');
 var path                    = require('path');
 var bodyParser              = require('body-parser');
-
-// var mysql = require('mysql');
 var validate = require('express-validator');
-var con= require('./dbconfig/dbconfig.js');
-var product        = require('./controllers/product.controller');
+var product        = require('./controllers/product.controller');//Calling the product controller
 
 app.use(validate());
 app.use(bodyParser.json({ limit: "20mb" }));
@@ -21,3 +18,5 @@ http.createServer(app).listen('2000', function(err){
 //API URL
 
 //http://localhost:2000/product/getProductsList
+
+//http://localhost:2000/product/getCategoryProductcount
