@@ -1,0 +1,17 @@
+Please find the details below to know about the files and the functionality.
+
+app.js is the node server file.
+
+Here we have 2 folders controllers and the services.
+
+In app.js we are importing the controllers.
+From controllers we will call the respective functions.
+
+This folder structure will help us to identify the different modules easily, here the handling will become easy for big projects.
+
+I have created 2 API for fetching the categories along with respective product count.
+Below given are the API URL's.
+
+1. http://localhost:2000/product/getProductsList
+
+2. http://localhost:2000/product/getCategoryProductcount
