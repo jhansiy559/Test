@@ -5,35 +5,13 @@ var mongojs = require('mongojs');
 
 var order = {};
 order.getProductsList = getProductsList;
+order.getCategoryProductcount = getCategoryProductcount;
 
 module.exports = order;
 
 function getProductsList(params){
-console.log('getProductsList');
  var deferred = Q.defer();
     try{
-        // database.tst_categories.find({},function(err,response){
-        //     if(err){
-        //         console.log('err===',err);
-        //     }else if(response){
-        //         var datacount = response.length;
-        //         console.log('datacount====',datacount);
-        //         var index = 0;
-        //         _.each(response, function(category){
-        //             database.tst_products.count({_id:mongojs.ObjectId(category._id)},function(err,product_count){
-        //                 category['count'] = product_count;
-        //                 index++;
-        //             });
-                    
-        //             console.log('index=====',index);
-        //             if(datacount == index){
-        //                 deferred.resolve({status:'success',result:response});
-        //             }
-                    
-        //         });
-                 
-        //       }
-        //   });
 
         database.tst_categories.aggregate([
             { $match: {}},
@@ -71,11 +49,39 @@ console.log('getProductsList');
               if(err){
                 console.log('error fetching data',err);
               }else{
-                  console.log('response====',response);
                deferred.resolve({status:'success', result:response})
               }
 
         });
+    }catch(exception){
+        console.log(exception);
+    }
+    return deferred.promise;
+}
+
+//Second pattern
+
+function getCategoryProductcount(params){
+    var deferred = Q.defer();
+    try{
+        database.tst_categories.find({},function(err,response){
+            if(err){
+                console.log('err===',err);
+            }else if(response){
+                var datacount = response.length;
+                var index = 0;
+                _.each(response, function(category){
+                    database.tst_products.count({category_id:mongojs.ObjectId(category._id)},function(err,product_count){
+                        category['count'] = product_count;
+                        index++;
+                        if(datacount == index){
+                            deferred.resolve({status:'success',result:response});
+                        }
+                    });
+                });
+                 
+              }
+          });
     }catch(exception){
         console.log(exception);
     }
