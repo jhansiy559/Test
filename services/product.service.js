@@ -40,14 +40,14 @@ module.exports = order;
 function getCategoryProductcount(params){
     var deferred = Q.defer();
     try{
-        database.tst_categories.find({},function(err,response){
+        database.app_categories.find({},function(err,response){
             if(err){
                 console.log('err===',err);
             }else if(response){
                 var datacount = response.length;
                 var index = 0;
                 _.each(response, function(category){
-                    database.tst_products.count({category_id:mongojs.ObjectId(category._id)},function(err,product_count){
+                    database.app_products.count({category_id:mongojs.ObjectId(category._id)},function(err,product_count){
                         category['count'] = product_count;
                         index++;
                         if(datacount == index){
@@ -71,7 +71,7 @@ function getCategoryProductcount(params){
 //Function: getCategoryProductcount()
 //Description: 
 //Here I used aggregate and lookup to join the 2 collections.
-//by grouping the categort id in the tst_products collection we will get the count of products for the respective categories 
+//by grouping the categort id in the app_products collection we will get the count of products for the respective categories 
 
 //Return: Finally we will get the categories and respective product count in the response
 
@@ -96,10 +96,10 @@ function getProductsList(params){
  var deferred = Q.defer();
     try{
 
-        database.tst_categories.aggregate([
+        database.app_categories.aggregate([
             { $match: {}},
             {$lookup: 
-                {from: "tst_products",localField: "_id",foreignField: "category_id",as: "productData"}
+                {from: "app_products",localField: "_id",foreignField: "category_id",as: "productData"}
             },
             { "$unwind": "$productData" },
             {
